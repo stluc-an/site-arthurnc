@@ -30,15 +30,19 @@
 
 					document.getElementById('submit').onclick = function changeVid() {
 					  subTxt = document.getElementById('subtitle').value;
-					  db.subtitles.put({
+
+						db.subtitles.put({ // on ajoute les infos dans les 2 champs de la DB
 							vid: vidPath(currVid),
 							sub: subTxt
+							// le champs "++id" défini plus haut s'update tout seul, 1, 2, 3, 4, etc
+
 						}).then (function(){
 	              // quand l'ajout est terminé, qu'est-ce qu'on fait?
 								currVid = getRandomVid(); // on récup un nouveau numéro de vid aléatoire
 							  htmlVid.setAttribute("src", vidPath(currVid)); // on change le SRC
-								document.getElementById('subtitle').value = "";
-								console.log(db.subtitles.toArray());
+								document.getElementById('subtitle').value = ""; // on enlève l'ancien texte du champs
+								console.log(db.subtitles.toArray()); // on print la DB dans la console
+
 	          }).catch(function(error) {
 	             console.log ("Un truc a merdé avec la DB: " + error);
 	          });
