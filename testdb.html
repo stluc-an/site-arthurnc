@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="dexie.js"></script>
+	</head>
+	<body>
+
+		<form>
+			<input type="text" id="subtitle" name="text" spellcheck="true">
+	    <button id="submit">Submit</button>
+		</form>
+
+		<div id="app">
+		</div>
+
+    <script src="main.js"></script>
+
+		<script>
+          // Define your database
+          var db = new Dexie("subtitles");
+          db.version(1).stores({
+              subtitles: '++id,vid,sub'
+							// la DB contiendra une table "subtitles" avec 3 champs
+							// "id", identifiant unique, autoincrémenté
+							// "vid", chemin vers la vidéo
+							// "sub", le ss-titre écrit
+          });
+
+					document.getElementById('submit').onclick = function changeVid() {
+					  subTxt = document.getElementById('subtitle').value;
+					  db.subtitles.put({
+							vid: vidPath(currVid),
+							sub: subTxt
+						}).then (function(){
+	              // quand l'ajout est terminé, qu'est-ce qu'on fait?
+								currVid = getRandomVid(); // on récup un nouveau numéro de vid aléatoire
+							  htmlVid.setAttribute("src", vidPath(currVid)); // on change le SRC
+								document.getElementById('subtitle').value = "";
+								console.log(db.subtitles.toArray());
+	          }).catch(function(error) {
+	             console.log ("Un truc a merdé avec la DB: " + error);
+	          });
+					}
+
+      </script>
+	</body>
+</html
