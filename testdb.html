@@ -6,11 +6,8 @@
 		<script src="dexie.js"></script>
 	</head>
 	<body>
-
-		<form>
 			<input type="text" id="subtitle" name="text" spellcheck="true">
 	    <button id="submit">Submit</button>
-		</form>
 
 		<div id="app">
 		</div>
@@ -18,7 +15,9 @@
     <script src="main.js"></script>
 
 		<script>
-          // Define your database
+					var lastSubs;
+
+					// Define your database
           var db = new Dexie("subtitles");
           db.version(1).stores({
               subtitles: '++id,vid,sub'
@@ -38,14 +37,19 @@
 
 						}).then (function(){
 	              // quand l'ajout est terminé, qu'est-ce qu'on fait?
-								currVid = getRandomVid(); // on récup un nouveau numéro de vid aléatoire
-							  htmlVid.setAttribute("src", vidPath(currVid)); // on change le SRC
+								changeRandomVid();
 								document.getElementById('subtitle').value = ""; // on enlève l'ancien texte du champs
-								console.log(db.subtitles.toArray()); // on print la DB dans la console
-
+								doSomethingWithLastSubs(5)
 	          }).catch(function(error) {
 	             console.log ("Un truc a merdé avec la DB: " + error);
 	          });
+					}
+
+					function doSomethingWithLastSubs(n){
+						db.subtitles.toArray().then(function(tab){
+							lastSubs = tab.slice(-n)
+							console.log(lastSubs)
+						})
 					}
 
       </script>
